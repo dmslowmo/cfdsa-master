@@ -1,0 +1,33 @@
+version: '3'
+
+volumes:
+  mysql-vol: 
+
+networks:
+  nw-net:
+
+services:
+  nwdb:
+    image: dmartana/nwdb:v1
+    build:
+      context: ./database
+    volumes:
+    - mysql-vol:/var/lib/mysql
+    environment: 
+    - MYSQL_ROOT_PASSWORD=changeit
+    networks:
+    - nw-net
+
+  nwapp: 
+    image: dmartana/nwapp:v1
+    build:
+      context: ./server
+    environment:
+    - APP_PORT=3000
+    - DB_HOST=nwdb
+    - DB_USER=root
+    - DB_PASSWORD=changeit
+    ports: 
+    - 8080:3000
+    networks:
+    - nw-net
