@@ -111,7 +111,7 @@ metadata:
 
 spec:
    rules:
-   - host: wordpress.<loadbalancer-IP>.nip.io
+   - host: wordpress.157.230.193.84.nip.io
      http:
         paths:
         - path: /
