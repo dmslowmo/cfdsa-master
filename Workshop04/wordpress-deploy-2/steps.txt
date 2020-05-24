@@ -1,0 +1,23 @@
+# create namespace for db cluster
+kubectl create ns mysql-operator
+
+# create namespace for ingress
+kubectl create ns nginx-ingress
+
+# install Helm packages
+helm install mysql-operator presslabs/mysql-operator --version 0.4.0-rc.1 -n mysql-operator
+helm install ngnix-ingress stable/nginx-ingress --version 1.37.0 -n nginx-ingress
+
+# For NFS server
+run deploy-nfs.sh
+
+# create wordpress namespace, secret, and deploy mysql cluster
+kubectl apply -f wordpress-db.yaml -n wordpress
+
+# make sure the wordpress-mysql-mysql-* pods are up and running before deploying the app
+# watch kubectl get all,ing,secret,pv,pvc -n wordpress
+
+# deploy ingress, service, and the app
+kubectl apply -f wordpress-app.yaml -n wordpress
+# if NFS used
+kubectl apply -f wordpress-app-nfs.yaml -n wordpress
