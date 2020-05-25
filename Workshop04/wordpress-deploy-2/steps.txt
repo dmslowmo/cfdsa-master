@@ -21,3 +21,9 @@ kubectl apply -f wordpress-db.yaml -n wordpress
 kubectl apply -f wordpress-app.yaml -n wordpress
 # if NFS used
 kubectl apply -f wordpress-app-nfs.yaml -n wordpress
+
+
+# additional notes: removing wordpress namespace got stuck in 'Terminating' state
+#1 kubectl get namespace wordpress -o json > removeFinalizer.json
+#2 Open removeFinalizer.json and look inside 'finalizers' array under 'spec' of Namespace. Remove the content of the array and save the file.
+#3 kubectl replace --raw "/api/v1/namespaces/wordpress/finalize" -f removeFinalizer.json
